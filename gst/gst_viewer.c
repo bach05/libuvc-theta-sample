@@ -183,13 +183,13 @@ main(int argc, char **argv)
 		cmd_name = argv[0];
 	else
 		cmd_name++;
-
+	
 	if (strcmp(cmd_name, "gst_loopback") == 0)
-		pipe_proc = "decodebin ! autovideoconvert !"
-			"video/x-raw,format=YUY2 ! identity drop-allocation=true !"
-			"v4l2sink device=/dev/video5 sync=false";
+        	pipe_proc = "decodebin ! autovideoconvert ! "
+        	"video/x-raw,format=I420 ! identity drop-allocation=true !"
+        	"v4l2sink device=/dev/video5 qos=false sync=false";
 	else
-		pipe_proc = " decodebin ! autovideosink sync=false";
+        	pipe_proc = "nvdec ! glimagesink qos=false sync=false";
 
 	if (!gst_src_init(&argc, &argv, pipe_proc))
 		return -1;
